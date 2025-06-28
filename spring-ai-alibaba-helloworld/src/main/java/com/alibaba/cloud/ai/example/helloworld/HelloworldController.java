@@ -18,7 +18,13 @@
 package com.alibaba.cloud.ai.example.helloworld;
 
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+import com.alibaba.cloud.ai.memory.jdbc.MysqlChatMemoryRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.ChatMemoryRepository;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.jdbc.core.JdbcTemplate;
 import reactor.core.publisher.Flux;
 
 import org.springframework.ai.chat.client.ChatClient;
@@ -42,27 +48,27 @@ public class HelloworldController {
 	private final ChatClient dashScopeChatClient;
 
 	// 也可以使用如下的方式注入 ChatClient
-	 public HelloworldController(ChatClient.Builder chatClientBuilder) {
-	  	this.dashScopeChatClient = chatClientBuilder
+	public HelloworldController(JdbcTemplate jdbcTemplate, ChatClient.Builder chatClientBuilder) {
+		// 构造 ChatMemoryRepository 和 ChatMemory
+		// 配置数据源后，项目启动后会自动建表
+		ChatMemoryRepository chatMemoryRepository = MysqlChatMemoryRepository.mysqlBuilder()
+				.jdbcTemplate(jdbcTemplate)
+				.build();
+		ChatMemory chatMemory = MessageWindowChatMemory.builder()
+				.chatMemoryRepository(chatMemoryRepository)
+				.build();
+		this.dashScopeChatClient = chatClientBuilder
 				.defaultSystem(DEFAULT_PROMPT)
-				// TODO
-				 // 实现 Chat Memory 的 Advisor
-				 // 在使用 Chat Memory 时，需要指定对话 ID，以便 Spring AI 处理上下文。
-//				 .defaultAdvisors(
-//						 new MessageChatMemoryAdvisor(new InMemoryChatMemory())
-//				 )
-				 // 实现 Logger 的 Advisor
-				 .defaultAdvisors(
-						 new SimpleLoggerAdvisor()
-				 )
-				 // 设置 ChatClient 中 ChatModel 的 Options 参数
-				 .defaultOptions(
-						 DashScopeChatOptions.builder()
-								 .withTopP(0.7)
-								 .build()
-				 )
-				 .build();
-	 }
+				.defaultAdvisors(new SimpleLoggerAdvisor())
+				// 注册Advisor
+				.defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+				.defaultOptions(
+						DashScopeChatOptions.builder()
+								.withTopP(0.7)
+								.build()
+				)
+				.build();
+	}
 
 	/**
 	 * ChatClient 简单调用
@@ -102,9 +108,7 @@ public class HelloworldController {
 		return this.dashScopeChatClient.prompt(query)
 				.advisors(
 						// TODO
-//						a -> a
-//								.param(CHAT_MEMORY_CONVERSATION_ID_KEY, id)
-//								.param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 100)
+						a -> a.param(ChatMemory.CONVERSATION_ID, id)
 				).stream().content();
 	}
 

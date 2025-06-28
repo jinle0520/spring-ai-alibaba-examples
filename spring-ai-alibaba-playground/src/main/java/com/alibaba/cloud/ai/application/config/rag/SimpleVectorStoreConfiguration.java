@@ -31,7 +31,7 @@ public class SimpleVectorStoreConfiguration {
 	@Bean
 	CommandLineRunner ingestTermOfServiceToVectorStore(VectorStoreDelegate vectorStoreDelegate) {
 		return args -> {
-			String type = System.getenv("VECTOR_STORE_TYPE");
+			String type = System.getenv("VECTOR_STORE_TYPE"); // 根据类型返回两种类型的向量数据库
 			VectorStoreInitializer initializer = new VectorStoreInitializer();
 			initializer.init(vectorStoreDelegate.getVectorStore(type));
 		};
