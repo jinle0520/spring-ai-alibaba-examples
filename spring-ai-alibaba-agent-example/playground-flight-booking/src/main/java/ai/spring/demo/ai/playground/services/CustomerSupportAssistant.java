@@ -47,6 +47,7 @@ public class CustomerSupportAssistant {
 	public CustomerSupportAssistant(ChatClient.Builder modelBuilder, VectorStore vectorStore, ChatMemory chatMemory) {
 
 		// @formatter:off
+//		大模型的初始化
 		this.chatClient = modelBuilder
 				.defaultSystem("""
 						您是“Funnair”航空公司的客户聊天支持代理。请以友好、乐于助人且愉快的方式来回复。
@@ -73,7 +74,7 @@ public class CustomerSupportAssistant {
 
 						// logger
 						new SimpleLoggerAdvisor()
-				).defaultToolNames(
+				).defaultToolNames( // 这里用@Tool注解没识别出来，所以只能用@Tool+Function的方式吗？
 						"getBookingDetails",
 						"changeBooking",
 						"cancelBooking"

@@ -27,7 +27,7 @@ public class BookingController {
 	@RequestMapping("/api/bookings")
 	@ResponseBody
 	public List<BookingDetails> getBookings() {
-		return flightBookingService.getBookings();
+		return flightBookingService.getBookings();  // 这里再页面初始化的时候会调用到，并展示我们初始化的内容
 	}
 
 }

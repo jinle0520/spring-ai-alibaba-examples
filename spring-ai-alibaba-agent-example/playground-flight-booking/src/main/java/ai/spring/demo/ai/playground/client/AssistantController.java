@@ -21,7 +21,7 @@ public class AssistantController {
 	@RequestMapping(path="/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<String> chat(@RequestParam(name = "chatId") String chatId,
 							 @RequestParam(name = "userMessage") String userMessage) {
-		return agent.chat(chatId, userMessage);
+		return agent.chat(chatId, userMessage); // 和用户对话的接口
 	}
 
 }

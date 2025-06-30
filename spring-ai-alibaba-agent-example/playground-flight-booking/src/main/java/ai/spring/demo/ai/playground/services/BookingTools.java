@@ -9,11 +9,18 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
 import org.springframework.core.NestedExceptionUtils;
+
+/**
+ * 通过@bean +返回值是Function的形式，将方法著恶策为大模型可以识别的工具方法
+ *
+ */
 
 @Configuration
 public class BookingTools {

@@ -75,6 +75,16 @@ public class FlightBookingService {
 			.orElseThrow(() -> new IllegalArgumentException("Booking not found"));
 	}
 
+	public LocalDate findBookingDate(String bookingNumber, String name) {
+		Booking booking = db.getBookings()
+				.stream()
+				.filter(b -> b.getBookingNumber().equalsIgnoreCase(bookingNumber))
+				.filter(b -> b.getCustomer().getName().equalsIgnoreCase(name))
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("Booking not found"));
+		return booking.getDate();
+	}
+
 	public BookingDetails getBookingDetails(String bookingNumber, String name) {
 		var booking = findBooking(bookingNumber, name);
 		return toBookingDetails(booking);
