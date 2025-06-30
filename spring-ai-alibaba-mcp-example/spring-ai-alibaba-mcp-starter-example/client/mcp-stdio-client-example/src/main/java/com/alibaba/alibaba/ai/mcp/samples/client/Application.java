@@ -40,7 +40,9 @@ public class Application {
             ConfigurableApplicationContext context) {
 
         return args -> {
-
+            // 这个client，和之前的配置方式是一样的，都是chatClientBuilder build出来的
+            // 不过mcp server的配置，就在resourse中的json文件中配置了一下，不用像之前那样写代码了，用的是mcp-stdio-server-example下的jar报
+            // 也就是说现在可以实现定义mcp server的jar包，然后本地以stdio的方式运行
             var chatClient = chatClientBuilder
                     .defaultToolCallbacks(tools)
                     .build();

@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Bean;
 		org.springframework.ai.mcp.client.autoconfigure.SseHttpClientTransportAutoConfiguration.class
 })
 public class Application {
-
+//sse方式没启动成功
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}

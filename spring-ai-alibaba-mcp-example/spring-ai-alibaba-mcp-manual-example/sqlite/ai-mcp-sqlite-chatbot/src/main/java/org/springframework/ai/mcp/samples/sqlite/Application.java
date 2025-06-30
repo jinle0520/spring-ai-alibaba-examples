@@ -67,13 +67,12 @@ public class Application {
 	public McpSyncClient mcpClient() {
 
 		// Windows 需要替换 uvx.exe
-		var stdioParams = ServerParameters.builder("uvx")
-				.args("mcp-server-sqlite", "--db-path",
-						getDbPath())
+		var stdioParams = ServerParameters.builder("uvx.exe")
+				.args("mcp-server-sqlite", "--db-path", getDbPath())
 				.build();
 
 		var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams))
-				.requestTimeout(Duration.ofSeconds(10)).build();
+				.requestTimeout(Duration.ofSeconds(30)).build();
 
 		var init = mcpClient.initialize();
 
@@ -86,7 +85,10 @@ public class Application {
 	// 如果使用 IDEA 一键启动，需要配置 working dir 或者调整此路径
 	// spring-ai-alibaba-mcp-example/spring-ai-alibaba-manual-mcp-example/sqlite/ai-mcp-sqlite/test.db
 	private static String getDbPath() {
-		return Paths.get(System.getProperty("user.dir"), "test.db").toString();
+		// D:\ideaProject\spring-ai-alibaba-examples\spring-ai-alibaba-mcp-example\spring-ai-alibaba-mcp-manual-example\sqlite\ai-mcp-sqlite-chatbot\test.db
+		String tempstr = Paths.get(System.getProperty("user.dir"), "spring-ai-alibaba-mcp-example/spring-ai-alibaba-mcp-manual-example/sqlite/ai-mcp-sqlite/test.db").toString();
+		System.out.println(tempstr);
+		return tempstr;
 	}
 
 }

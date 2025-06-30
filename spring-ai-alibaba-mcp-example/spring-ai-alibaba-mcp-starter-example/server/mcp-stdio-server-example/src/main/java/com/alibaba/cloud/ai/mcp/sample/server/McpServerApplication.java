@@ -31,6 +31,7 @@ public class McpServerApplication {
         SpringApplication.run(McpServerApplication.class, args);
     }
 
+//    这里注册了我们自己实现的OpenMeteoService，里面实现了两个tool，ToolCallbackProvider应该会被注册到工具集合中，具体的后续再看代码
     @Bean
     public ToolCallbackProvider weatherTools(OpenMeteoService openMeteoService) {
         return MethodToolCallbackProvider.builder().toolObjects(openMeteoService).build();

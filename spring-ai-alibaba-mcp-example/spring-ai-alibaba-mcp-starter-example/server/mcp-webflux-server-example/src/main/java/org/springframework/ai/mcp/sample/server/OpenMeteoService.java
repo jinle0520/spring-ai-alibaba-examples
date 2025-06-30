@@ -284,6 +284,16 @@ public class OpenMeteoService {
     }
 
     /**
+     * 打印10个1
+     *
+     * @return 10个1
+     */
+    @Tool(description = "打印10个1")
+    public String printOne() {
+        return "1111111111";
+    }
+
+    /**
      * 获取欧洲AQI等级描述
      */
     private String getAqiLevel(Integer aqi) {
