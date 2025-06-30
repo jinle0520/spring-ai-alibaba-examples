@@ -54,6 +54,7 @@ public class BailianAgentRagController {
 	@GetMapping("/bailian/agent/call")
 	public String call(@RequestParam(value = "message",
 			defaultValue = "如何使用SDK快速调用阿里云百炼的应用?") String message) {
+		//  agent这里调用我们发布的百炼大模型，不过我们的rag文档实在百炼平台上集成的，而不是在我们的代码中调用的
 		ChatResponse response = agent.call(new Prompt(message, DashScopeAgentOptions.builder().withAppId(appId).build()));
 		if (response == null || response.getResult() == null) {
 			logger.error("chat response is null");

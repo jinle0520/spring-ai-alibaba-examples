@@ -44,6 +44,7 @@ public class CloudRagController {
 
 	@GetMapping("/bailian/knowledge/importDocument")
 	public void importDocument() {
+		// 这个是我们通过代码的方式创建知识库，其实和我们去平台上创建一样
 		cloudRagService.importDocuments();
 	}
 
