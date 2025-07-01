@@ -38,7 +38,7 @@ public class DataClean {
 	private static final Map<Integer, String> WebLink_MAP = new HashMap<>();
 
 	public List<Document> getData(IQSSearchResponse respData) throws URISyntaxException {
-
+		// 数据清洗
 		List<Document> documents = new ArrayList<>();
 		Map<String, Object> metadata = getQueryMetadata(respData);
 

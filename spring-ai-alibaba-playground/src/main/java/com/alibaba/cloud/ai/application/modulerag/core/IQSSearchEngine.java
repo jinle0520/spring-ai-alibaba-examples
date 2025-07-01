@@ -88,6 +88,9 @@ public class IQSSearchEngine {
 		String jsonReqData = objectMapper.writeValueAsString(reqData);
 
 		// String encodeQ = URLEncoder.encode(query, StandardCharsets.UTF_8);
+		// 这里的结果是联网查询的结果
+		System.out.println(System.getenv("IQS_SEARCH_API_KEY"));
+		System.out.println(System.getenv("AI_DASHSCOPE_API_KEY"));
 		ResponseEntity<IQSSearchResponse> response = this.restClient.post()
 				.uri(
 						"/search/unified?query={query}&timeRange={timeRange}",

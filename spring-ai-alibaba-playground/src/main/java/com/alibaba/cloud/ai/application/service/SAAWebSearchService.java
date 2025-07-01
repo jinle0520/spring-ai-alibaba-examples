@@ -111,7 +111,7 @@ public class SAAWebSearchService {
 
 		return chatClient.prompt()
 				.advisors(
-						createRetrievalAugmentationAdvisor(),
+						createRetrievalAugmentationAdvisor(),  // 这里面涉及联网查询和数据清洗
 						reasoningContentAdvisor,
 						simpleLoggerAdvisor
 				).user(prompt)
@@ -184,17 +184,25 @@ public class SAAWebSearchService {
 
 	private RetrievalAugmentationAdvisor createRetrievalAugmentationAdvisor() {
 
+		/*
+		  QueryAugmenter 查询增强：使用附加的上下文数据信息增强用户 query，提供大模型回答问题时的必要上下文信息；
+		  QueryTransformer 查询改写：因为用户的输入通常是片面的，关键信息较少，不便于大模型理解和回答问题。因此需要使用 prompt 调优手段或者大模型改写用户 query；
+		  QueryExpander 查询扩展：将用户 query 扩展为多个语义不同的变体以获得不同视角，有助于检索额外的上下文信息并增加找到相关结果的机会。
+
+		  DocumentRetriever：检索器，根据 QueryExpander 使用不同的数据源进行检索，例如 搜索引擎、向量存储、数据库或知识图等；
+			DocumentJoiner：将从多个 query 和从多个数据源检索到的 Document 合并为一个 Document 集合；
+		 */
 		return RetrievalAugmentationAdvisor.builder()
-				.documentRetriever(webSearchRetriever)
-				.queryTransformers(queryTransformer)
-				.queryAugmenter(
+				.documentRetriever(webSearchRetriever)// 2. Retrieval
+				.queryTransformers(queryTransformer)// 1.pre-retrival
+				.queryAugmenter(  // 1.pre-retrival
 						new CustomContextQueryAugmenter(
 								queryArgumentPromptTemplate,
 								null,
 								true)
-				).queryExpander(queryExpander)
-				.documentJoiner(new ConcatenationDocumentJoiner())
-				.build();
+				).queryExpander(queryExpander) // 1.pre-retrival
+				.documentJoiner(new ConcatenationDocumentJoiner())  // 2. Retrieval
+				.build();  // 3.post-Retrieval，这个好像被删了
 	}
 
 }

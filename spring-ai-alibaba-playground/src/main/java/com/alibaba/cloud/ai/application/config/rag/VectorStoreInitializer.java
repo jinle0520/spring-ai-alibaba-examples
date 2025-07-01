@@ -43,6 +43,7 @@ public class VectorStoreInitializer {
 	private final Logger logger = LoggerFactory.getLogger(VectorStoreInitializer.class);
 
 	public void init(VectorStore vectorStore) throws Exception {
+		// 获取markDown文件，resources下的三个文件
 		List<MarkdownDocumentReader> markdownDocumentReaderList = loadMarkdownDocuments();
 
 		int size = 0;
@@ -53,6 +54,7 @@ public class VectorStoreInitializer {
 
 		logger.debug("Start to load markdown documents into vector store......");
 		for (MarkdownDocumentReader markdownDocumentReader : markdownDocumentReaderList) {
+			// 根据文本内容拆分，但是embdding在哪？
 			List<Document> documents = new TokenTextSplitter(2000, 1024, 10, 10000, true).transform(markdownDocumentReader.get());
 			size += documents.size();
 

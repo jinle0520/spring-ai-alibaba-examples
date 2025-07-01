@@ -55,7 +55,7 @@ public class SAARAGController {
 			@Validated @RequestParam("prompt") String prompt,
 			@RequestHeader(value = "chatId", required = false, defaultValue = "spring-ai-alibaba-playground-rag") String chatId
 	) {
-
+//		这里是 rag页面调用的入口
 		response.setCharacterEncoding("UTF-8");
 		return ragService.ragChat(chatId, prompt);
 	}

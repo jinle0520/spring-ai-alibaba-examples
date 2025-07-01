@@ -51,7 +51,7 @@ public class SAAWebSearchController {
 			HttpServletResponse response,
 			@Validated @RequestBody String prompt
 	) {
-
+//  	联网查询的入口
 		response.setCharacterEncoding("UTF-8");
 		return webSearch.chat(prompt);
 	}

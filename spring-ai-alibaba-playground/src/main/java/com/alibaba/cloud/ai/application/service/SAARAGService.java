@@ -72,7 +72,7 @@ public class SAARAGService {
 				).advisors(
 						QuestionAnswerAdvisor
 								.builder(vectorStoreDelegate.getVectorStore(vectorStoreType))
-								.searchRequest(
+								.searchRequest(  // 这里实现了rag，寻找相似度最高的6条消息
 										SearchRequest.builder()
 												// TODO all documents retrieved from ADB are under 0.1
 //												.similarityThreshold(0.6d)
