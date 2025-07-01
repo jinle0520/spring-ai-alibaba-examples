@@ -50,8 +50,8 @@ spring:
        tool-calling:
          baidu:
            translate:
-             ak: ${BAIDU_TRANSLATE_APP_ID:input-your-baidu-app-id}
-             sk: ${BAIDU_TRANSLATE_SECRET_KEY:input-your-baidu-app-key}
+             ak: ${BAIDU_TRANSLATE_APP_ID:20250701002394495}
+             sk: ${BAIDU_TRANSLATE_SECRET_KEY:******}
            map:
              ak: ${BAIDU_MAP_API_KEY:input-your-baidu-map-key}
 

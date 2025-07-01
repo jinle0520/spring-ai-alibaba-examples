@@ -78,25 +78,25 @@ public class SAAToolsService {
 
 		// manual run tools flag
 		ChatOptions chatOptions = ToolCallingChatOptions.builder()
-				.toolCallbacks(toolsInit.getTools())
+				.toolCallbacks(toolsInit.getTools()) // 获取到两个百度的tool
 				.internalToolExecutionEnabled(false)
 				.build();
 		Prompt userPrompt = new Prompt(prompt, chatOptions);
-
+		// response为大模型组装函数以及入参后的结果
 		ChatResponse response = chatClient.prompt(userPrompt)
 				.call().chatResponse();
 
 		logger.debug("ChatResponse: {}", response);
-		assert response != null;
+		assert response != null; // toolCalls为大模型需要调用的函数
 		List<AssistantMessage.ToolCall> toolCalls = response.getResult().getOutput().getToolCalls();
-		logger.debug("ToolCalls: {}", toolCalls);
+		logger.debug("ToolCalls: {}", toolCalls);// responseByLLm一直是空，不知道为啥
 		String responseByLLm = response.getResult().getOutput().getText();
 		logger.debug("Response by LLM: {}", responseByLLm);
 
 		// execute tools with no chat memory messages.
 		var tcr = ToolCallResp.TCR();
 		if (!toolCalls.isEmpty()) {
-
+//tcr为组装的参数
 			tcr = ToolCallResp.startExecute(
 					responseByLLm,
 					toolCalls.get(0).name(),
@@ -105,7 +105,7 @@ public class SAAToolsService {
 			logger.debug("Start ToolCallResp: {}", tcr);
 			ToolExecutionResult toolExecutionResult = null;
 
-			try {
+			try { // 在这里就获取到了，函数调用的结果
 				toolExecutionResult = toolCallingManager.executeToolCalls(new Prompt(prompt, chatOptions), response);
 
 				tcr.setToolEndTime(LocalDateTime.now());
@@ -125,6 +125,7 @@ public class SAAToolsService {
 //				ToolResponseMessage toolResponseMessage = (ToolResponseMessage) toolExecutionResult.conversationHistory()
 //						.get(toolExecutionResult.conversationHistory().size() - 1);
 //				llmCallResponse = toolResponseMessage.getResponses().get(0).responseData();
+				// 这里我理解是把历史消息，以及函数调用之后的结果，回传给了大模型，大模型再组装之后返回给用户
 				ChatResponse finalResponse = chatClient.prompt().messages(toolExecutionResult.conversationHistory()).call().chatResponse();
 				llmCallResponse = finalResponse.getResult().getOutput().getText();
 			}
