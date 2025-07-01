@@ -83,7 +83,7 @@ public class SAAMcpController {
 			@Validated @RequestParam("prompt") String prompt,
 			@RequestParam(value = "envs", required = false) String envs
 	) {
-
+		// 再mcp页面，点击工具，点击执行，会执行到这里
 		Map<String, String> env = new HashMap<>();
 		if (StringUtils.hasText(envs)) {
 			for (String entry : envs.split(",")) {

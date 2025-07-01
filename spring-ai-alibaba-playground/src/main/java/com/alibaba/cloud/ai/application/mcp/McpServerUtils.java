@@ -107,7 +107,7 @@ public final class McpServerUtils {
 	}
 
 	public static void initMcpServerContainer(ToolCallbackProvider toolCallbackProvider) throws IOException {
-
+// 这步理解成，利用spring ai的工具定义，加上我们自己封装的mcp server的属性，来展示给用户
 		McpServerConfig mcpServerConfig = McpServerUtils.getMcpServerConfig();
 		Map<String, String> mcpServerDescMap = initMcpServerDescMap();
 

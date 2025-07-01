@@ -90,17 +90,17 @@ public class SAAMcpService {
 		this.tools = tools;
 		this.toolCallingManager = toolCallingManager;
 
-		McpServerUtils.initMcpServerContainer(tools);
+		McpServerUtils.initMcpServerContainer(tools); // 用这些工具初始化mcp server 的container
 	}
 
 	public ToolCallResp chat(String prompt) {
 
-		// manual run tools flag
+		// manual run tools flag  tools.getToolCallbacks()中有关于经纬度的两个工具
 		ChatOptions chatOptions = ToolCallingChatOptions.builder()
 				.toolCallbacks(tools.getToolCallbacks())
 				.internalToolExecutionEnabled(false)
 				.build();
-
+//大模型的输出，这里输出了大模型需要调用的函数是哪个，以及入参
 		ChatResponse response = chatClient.prompt(new Prompt(prompt, chatOptions))
 				.call().chatResponse();
 
@@ -124,7 +124,7 @@ public class SAAMcpService {
 			logger.debug("Start ToolCallResp: {}", tcr);
 			ToolExecutionResult toolExecutionResult = null;
 
-			try {
+			try {  // toolExecutionResult
 				toolExecutionResult = toolCallingManager.executeToolCalls(new Prompt(prompt, chatOptions), response);
 
 				tcr.setToolEndTime(LocalDateTime.now());
@@ -145,7 +145,7 @@ public class SAAMcpService {
 //						.get(toolExecutionResult.conversationHistory().size() - 1);
 //				llmCallResponse = toolResponseMessage.getResponses().get(0).responseData();
 				ChatResponse finalResponse = chatClient.prompt().messages(toolExecutionResult.conversationHistory())
-						.call().chatResponse();
+						.call().chatResponse(); //  这里是真正的获取到了mcp的结果
 				if (finalResponse != null) {
 					llmCallResponse = finalResponse.getResult().getOutput().getText();
 				}
@@ -176,7 +176,7 @@ public class SAAMcpService {
 	}
 
 	public ToolCallResp run(String id, Map<String, String> envs, String prompt) throws IOException {
-
+		// 根据id获取对应的mcp server
 		Optional<McpServer> runMcpServer = McpServerContainer.getServerById(id);
 		if (runMcpServer.isEmpty()) {
 			logger.error("McpServer not found, id: {}", id);
@@ -194,7 +194,7 @@ public class SAAMcpService {
 		if (parameters.command().startsWith("java")) {
 			String oldMcpLibsPath = McpServerUtils.getLibsPath(parameters.args());
 			String rewriteMcpLibsAbsPath = getMcpLibsAbsPath(McpServerUtils.getLibsPath(parameters.args()));
-
+			// rewriteMcpLibsAbsPath = D:\ideaProject\spring-ai-alibaba-examples\spring-ai-alibaba-playground\mcp-libs\weather.jar
 			parameters.args().remove(oldMcpLibsPath);
 			parameters.args().add(rewriteMcpLibsAbsPath);
 		}

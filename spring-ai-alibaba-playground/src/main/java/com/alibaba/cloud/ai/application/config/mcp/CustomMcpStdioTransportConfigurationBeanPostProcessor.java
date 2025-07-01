@@ -70,7 +70,7 @@ public class CustomMcpStdioTransportConfigurationBeanPostProcessor implements Be
 
 			McpServerConfig mcpServerConfig;
 			try {
-				mcpServerConfig = McpServerUtils.getMcpServerConfig();
+				mcpServerConfig = McpServerUtils.getMcpServerConfig(); // 获取mcp的配置，就是通过mcp-config.yaml拿到的
 
 				// Handle the jar relative path issue in the configuration file.
 				for (Map.Entry<String, McpStdioClientProperties.Parameters> entry : mcpServerConfig.getMcpServers()
